@@ -33,7 +33,7 @@
 
                     if(bool == "correct"){ // if the key is valid
 
-                        run = false //stops loop as valid key is found
+                        run = false; //stops loop as valid key is found
 
                         return string; // while the key is valid the program is ended
                     }
@@ -88,7 +88,7 @@
                 // removes the first 8 bytes of the answer to only get the second half like imul gives
                 for (i = 0; i < 8; i++){
 
-                    numberStr = numberStr.slice(0, -1); // removes the last digit
+                    numberStr = numberStr.slice(0, -1); // removes the last digithttps://github.com/Thomas-Fahey/Serial-Key-3-Key-Generator/blob/main/index.html
 
                 }
                     
@@ -102,7 +102,7 @@
 
                 var compareDecimal = resultDecimal * 10; // multiplies the shifted result by 10 (5 and then 2) in the same way as binary
 
-                var resultHex = compareDecimal.toString(16) //converts the value to hexadecimal
+                var resultHex = compareDecimal.toString(16); //converts the value to hexadecimal
 
                 if (compareDecimal == total){ // compares the total of the characters and the generated value and if they match then it is valid
                         
