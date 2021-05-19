@@ -1,110 +1,126 @@
 <html>
-<head>
-    <script>
+    <head>
+        <script>
+	//-------------------------------------------------------------------------------
+	//This code is written by Thomas Fahey for a year 10 IST assignment. This is all my own work and any work of others is referenced
+	//-------------------------------------------------------------------------------
 
-        for (count = 0; count < 11; count++){
-            document.write(makeString() + "<br/>");
-        }
-        
-        function makeString() {
-            var string = ""; //sets a variable for string
-            var run = true;
-            while(run == true){ // makes a loop that only ends when a valid key is found
-                string = "";
-                for (i = 0; i < 11; i++){   //loops though and makes a 11 digit string of numbers
+            // loop to run the keygen 10 times   
 
-                    string = string + Math.floor(Math.random() * 10); //generates a random number from 0 to 9 and adds it to the end
+            for (count = 0; count < 11; count++){
 
-                }
+                 document.write(makeString() + "<br/>"); // prints valid key to page
 
-                var bool = checkString(string); // uses the checkString function to see if key is valid
-
-                if(bool == "correct"){ // if the key is valid
-                    run = false
-                    return string; // while the key is vaild the program is ended
-                }
             }
-        }
-
-        function checkString(strInput) {
-
-            var charDecimalValue = 0; //gets the decimal value of the character and adds it to the total
-
-            var total = 0; //records the total value
-
-            var even = false; //used to record if the current value is odd or even
-            
-            //Getting value of string
-
-            for (i = 0; i < 11; i++){
                 
-                charDecimalValue = strInput.charCodeAt(i); // gets decimal value of the character
+            function makeString() { // makes a random 11 character string to be tested
 
-                charDecimalValue = charDecimalValue - 48; // subtracts 48 (30 in hex) to get the value - 48
+                var string = ""; //sets a variable for string
 
-                if (even  == true){ //sees if the value is even
+                var run = true; //condition to keep while loop running
 
-                    charDecimalValue = charDecimalValue * 2; //multiplies number by 2 if it is even
+                while(run == true){ // makes a loop that only ends when a valid key is found
 
-                    if (charDecimalValue > 9) {// if number is greater than 9
+                    string = ""; //declares the string variable as a string
 
-                        charDecimalValue = charDecimalValue - 9; // subtract 9 if the number is greater than 9
+                    for (i = 0; i < 11; i++){   //loops though and makes a 11 digit string of numbers
+
+                        string = string + Math.floor(Math.random() * 10); //generates a random number from 0 to 9 and adds it to the end
+
                     }
 
-                    even = false; //makes the next value odd
+                    var bool = checkString(string); // uses the checkString function to see if key is valid
+
+                    if(bool == "correct"){ // if the key is valid
+
+                        run = false //stops loop as valid key is found
+
+                        return string; // while the key is valid the program is ended
+                    }
+                }
+            }
+
+            function checkString(strInput) {
+
+                var charDecimalValue = 0; //gets the decimal value of the character and adds it to the total
+
+                var total = 0; //records the total value
+
+                var even = false; //used to record if the current value is odd or even
+                    
+                //Getting value of string like done in binary
+
+                for (i = 0; i < 11; i++){
+                        
+                    charDecimalValue = strInput.charCodeAt(i); // gets decimal value of the character
+
+                    charDecimalValue = charDecimalValue - 48; // subtracts 48 (30 in hex) to get the value - 48
+
+                    if (even  == true){ //sees if the value is even
+
+                        charDecimalValue = charDecimalValue * 2; //multiplies number by 2 if it is even
+
+                        if (charDecimalValue > 9) { // if number is greater than 9
+
+                            charDecimalValue = charDecimalValue - 9; // subtract 9 if the number is greater than 9
+                        }
+
+                        even = false; //makes the next value odd
+                    }
+
+                    else{
+
+                        even = true; //makes the next value even
+                    }
+
+                    total = total + charDecimalValue; //adds the current characters value to the total
+                } 
+
+
+                //multiplies the numbers and gets the second 32bits of the answer to replicate the imul used in the binary
+
+                var number = parseInt(66666667, 16) * total; // multiplies 66666667(base 16) and the total
+
+                var numberHex = number.toString(16); //gets the number in hexadecimal so bites can be removed
+                    
+                var numberStr = numberHex.toString(); //converts the hex value to a string to allow for easy removal of bites
+
+                // removes the first 8 bytes of the answer to only get the second half like imul gives
+                for (i = 0; i < 8; i++){
+
+                    numberStr = numberStr.slice(0, -1); // removes the last digit
+
+                }
+                    
+                number = parseInt(numberStr) // coverts number back to a integer from a string
+
+                //shifts by two bites to the right
+
+                var resultDecimal = parseInt(number, 16); //converts the result back to decimal
+
+                resultDecimal = resultDecimal >> 2; // shifts the number by 2 bites like the sar does in the binary
+
+                var compareDecimal = resultDecimal * 10; // multiplies the shifted result by 10 (5 and then 2) in the same way as binary
+
+                var resultHex = compareDecimal.toString(16) //converts the value to hexadecimal
+
+                if (compareDecimal == total){ // compares the total of the characters and the generated value and if they match then it is valid
+                        
+                    return "correct"; // returns that the string is valid
+
                 }
 
-                else{
+                else {
 
-                    even = true; //makes the next value even
+                    return "incorrect"; // returns that the string is invalid
+
                 }
-
-                total = total + charDecimalValue; //adds the current characters value to the total
-            } 
-
-
-            //compare multiplies the number and gets the second 32bits of the answer
-
-            var number = parseInt(66666667, 16) * total; // multiplies 66666667(base 16) and the total
-
-            var numberHex = number.toString(16); //gets the number in hexadecimal
-            
-            var numberStr = numberHex.toString(); //converts the hex value to a string to allow for easy removal of bites
-
-            // removes the first 8 bytes of the answer to only get the second half like imul gives
-            for (i = 0; i < 8; i++){
-
-                numberStr = numberStr.slice(0, -1);
-
             }
-            
-            number = parseInt(numberStr) // coverts number back to a integer from a string
+        </script>
+    </head>
 
-            //shifts by two bites to the right
+    <body>
+        <button onclick="location.reload()">New keys</button>
+    </body>
 
-            var resultDecimal = parseInt(number, 16); //converts the result back to decimal
-
-            resultDecimal = resultDecimal >> 2; // shifts the number by 2 bites
-
-            var compareDecimal = resultDecimal * 10; // multiplies the shifted result by 10 (5 and then 2) in the same way as binary
-
-            var resultHex = compareDecimal.toString(16) //converts the value to hexadecimal
-
-            if (compareDecimal == total){ // compares the total of the characters and the generated value and if they match then it is valid
-                
-                return "correct"; // displays good message
-
-            }
-
-            else {
-
-                return "incorrect"; // displays bad message
-
-            }
-    }
-    </script>
-</head>
-	<body>
-  	  <button onclick="location.reload()">New keys</button>
-	</body>
-</html>
+</html> 
